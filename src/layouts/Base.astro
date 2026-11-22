@@ -1,0 +1,139 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { business, contact, legal, location, pricing, product } from '../../site.config';
+import { absoluteUrl, url } from '../lib/url';
+import { getPhoto } from '../lib/photos';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Pfad relativ zur Startseite, z. B. 'impressum/' */
+  path?: string;
+  noindex?: boolean;
+  structuredData?: boolean;
+}
+
+const {
+  title = business.title,
+  description = business.description,
+  path = '',
+  noindex = false,
+  structuredData = false,
+} = Astro.props;
+
+const canonical = absoluteUrl(path);
+
+// Open-Graph-Bild: eigenes Hero-Foto, sobald vorhanden – sonst die mitgelieferte Grafik.
+const heroPhoto = getPhoto('hero');
+const ogImage = heroPhoto
+  ? new URL((await getImage({ src: heroPhoto, width: 1200, format: 'jpg', quality: 82 })).src, canonical).href
+  : absoluteUrl('og-image.png');
+
+// Hinweise beim Build, falls noch Platzhalter aktiv sind.
+if (import.meta.env.PROD && Astro.url.pathname === url('')) {
+  if (contact.email.endsWith('@example.com')) {
+    console.warn('\n⚠️  site.config.ts: contact.email ist noch ein Platzhalter (example.com).');
+  }
+  if (!legal.ownerName || !legal.street || !legal.postalCity) {
+    console.warn('⚠️  site.config.ts: Angaben unter "legal" für Impressum/Datenschutz fehlen noch.\n');
+  }
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: business.name,
+  serviceType: 'Verleih von Fahrradkoffern',
+  description,
+  url: canonical,
+  areaServed: { '@type': 'City', name: 'Wien' },
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceLocation: {
+      '@type': 'Place',
+      name: location.name,
+      address: {
+        '@type': 'PostalAddress',
+        postalCode: location.postalCode,
+        addressLocality: location.city,
+        addressCountry: 'AT',
+      },
+    },
+  },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: `${product.name} – Tagesmiete`,
+      priceCurrency: 'EUR',
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: pricing.day,
+        priceCurrency: 'EUR',
+        unitCode: 'DAY',
+        referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'DAY' },
+      },
+    },
+    {
+      '@type': 'Offer',
+      name: `${product.name} – Wochenmiete`,
+      priceCurrency: 'EUR',
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: pricing.week,
+        priceCurrency: 'EUR',
+        unitCode: 'WEE',
+        referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'WEE' },
+      },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="de-AT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#f7f7f2" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={url('apple-touch-icon.png')} />
+    <link rel="sitemap" href={url('sitemap.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_AT" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${product.name} – Fahrradkoffer mieten in Wien`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <Header />
+    <main id="inhalt">
+      <slot />
+    </main>
+    <Footer />
+    <slot name="after" />
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

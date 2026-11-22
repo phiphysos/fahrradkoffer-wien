@@ -1,0 +1,62 @@
+---
+import Base from './Base.astro';
+import { url } from '../lib/url';
+
+interface Props {
+  title: string;
+  path: string;
+}
+const { title, path } = Astro.props;
+---
+
+<Base title={`${title} | Fahrradkoffer mieten Wien`} description={`${title} – Fahrradkoffer mieten Wien`} path={path} noindex>
+  <article class="legal container">
+    <a class="text-link legal__back" href={url('')}>← Zur Startseite</a>
+    <h1 class="h2">{title}</h1>
+    <div class="legal__body">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .legal {
+    max-width: calc(46rem + var(--gutter) * 2);
+    padding-block: clamp(2rem, 6vw, 4rem) var(--section);
+  }
+
+  .legal__back {
+    display: inline-flex;
+    min-height: 44px;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+  }
+
+  .legal__body {
+    margin-top: 2.5rem;
+    color: var(--ink-soft);
+  }
+
+  .legal__body :global(h2) {
+    margin: 2.5rem 0 0.75rem;
+    font-size: 1.5rem;
+    color: var(--ink);
+  }
+
+  .legal__body :global(p),
+  .legal__body :global(ul) {
+    margin-bottom: 1rem;
+  }
+
+  .legal__body :global(a) {
+    color: var(--accent);
+    overflow-wrap: anywhere;
+  }
+
+  .legal__body :global(.todo) {
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    background: #fbe7c6;
+    color: #6b4200;
+  }
+</style>

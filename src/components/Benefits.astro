@@ -1,0 +1,143 @@
+---
+import { ShieldCheck, Luggage, CalendarDays, MapPin } from '@lucide/astro';
+import { location, product } from '../../site.config';
+import { num } from '../lib/url';
+
+const items = [
+  { icon: ShieldCheck, title: 'Sicher reisen', text: 'Abschließbarer Fahrradkoffer inklusive Schloss.' },
+  {
+    icon: Luggage,
+    title: 'Leicht transportieren',
+    text: `Praktische Rollen und nur ${num(product.weightKg, 1)} kg Eigengewicht.`,
+  },
+  { icon: CalendarDays, title: 'Flexibel mieten', text: 'Tages- und Wochenpreise für deine Reise.' },
+  { icon: MapPin, title: 'Einfach abholen', text: `Persönliche Übergabe in ${location.city} beim Westbahnhof.` },
+];
+---
+
+<section class="section benefits" aria-labelledby="benefits-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Warum mieten</p>
+        <h2 id="benefits-title" class="h2" data-reveal style="--reveal-delay: 60">
+          Gut verpackt.<br />Entspannt unterwegs.
+        </h2>
+      </div>
+      <p class="lead" data-reveal style="--reveal-delay: 120">
+        Ob Trainingslager, Gran Fondo oder Gravel-Abenteuer: Mit einem gemieteten Koffer reist dein Rad geschützt – ohne
+        dass du dir selbst einen kaufen und lagern musst.
+      </p>
+    </div>
+
+    <ul class="benefits__grid" role="list">
+      {
+        items.map((item, i) => (
+          <li class="benefit" data-reveal style={`--reveal-delay: ${i * 80}`}>
+            <span class="benefit__icon">
+              <item.icon aria-hidden="true" stroke-width={1.6} />
+            </span>
+            <span class="benefit__index tabular" aria-hidden="true">
+              0{i + 1}
+            </span>
+            <h3 class="h3">{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .benefits__grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.875rem;
+  }
+
+  @media (min-width: 600px) {
+    .benefits__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .benefits__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .benefit {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border-radius: var(--radius);
+    background: var(--sage);
+    transition:
+      transform 0.4s var(--ease),
+      background-color 0.4s var(--ease);
+  }
+
+  @media (min-width: 1100px) {
+    .benefit {
+      min-height: 19rem;
+    }
+    .benefit .h3 {
+      margin-top: auto;
+    }
+  }
+
+  @media (hover: hover) {
+    .benefit:hover {
+      background: #dfe6dd;
+    }
+    .benefit:hover .benefit__icon {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+  }
+
+  .benefit__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--accent);
+    transition:
+      background-color 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+
+  @media (min-width: 1100px) {
+    .benefit__icon {
+      margin-bottom: 3.5rem;
+    }
+  }
+
+  .benefit__icon :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .benefit__index {
+    position: absolute;
+    top: clamp(1.5rem, 3vw, 2rem);
+    right: clamp(1.5rem, 3vw, 2rem);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .benefit p {
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+</style>

@@ -1,0 +1,130 @@
+---
+import { Plus } from '@lucide/astro';
+import { location, pricing, product } from '../../site.config';
+import { euro, num } from '../lib/url';
+
+const faqs: { q: string; a: string; link?: { href: string; label: string } }[] = [
+  {
+    q: 'Passt mein Fahrrad in den Koffer?',
+    a: `Der ${product.name} ist für Rennräder, Gravelbikes, Triathlonräder und Mountainbikes bis 29 Zoll geeignet. Die Innenmaße betragen ${num(product.inner.length)} × ${num(product.inner.width)} × ${num(product.inner.depth)} mm. Bitte prüfe die Maße deines Rades – bei Unsicherheit schreib uns einfach Rahmengröße und Modell in die Anfrage.`,
+  },
+  {
+    q: 'Wie funktioniert die Kaution?',
+    a: `Pro Koffer fällt eine Kaution von ${euro(pricing.deposit)} an. Du bekommst sie bei der Rückgabe des Koffers zurück. Alle Details besprechen wir bei der Übergabe.`,
+  },
+  {
+    q: 'Kann ich den Koffer liefern lassen?',
+    a: `Nein, ein Versand ist leider nicht möglich. Abholung und Rückgabe erfolgen persönlich in der Nähe des ${location.name}.`,
+  },
+  {
+    q: 'Ist meine Anfrage schon eine Reservierung?',
+    a: 'Nein. Über das Formular erstellst du eine E-Mail an uns. Sobald wir sie erhalten haben, prüfen wir die Verfügbarkeit für deinen Zeitraum und melden uns persönlich bei dir.',
+  },
+  {
+    q: 'Wie verpacke ich mein Rad richtig?',
+    a: 'Zum Koffer gibt es ein Video mit einer Packanleitung, das wir dir gerne schicken.',
+    link: product.packingVideoUrl ? { href: product.packingVideoUrl, label: 'Pack-Video ansehen' } : undefined,
+  },
+  {
+    q: 'Kann ich beide Koffer gleichzeitig mieten?',
+    a: `Ja. Es stehen ${product.units} Koffer zur Verfügung – gib einfach die gewünschte Anzahl in deiner Anfrage an.`,
+  },
+];
+---
+
+<section id="faq" class="section faq" aria-labelledby="faq-title">
+  <div class="container faq__grid">
+    <div>
+      <p class="eyebrow" data-reveal>FAQ</p>
+      <h2 id="faq-title" class="h2" data-reveal style="--reveal-delay: 60">Gut zu wissen.</h2>
+    </div>
+    <div class="faq__list" data-reveal style="--reveal-delay: 100">
+      {
+        faqs.map((item) => (
+          <details class="faq__item">
+            <summary>
+              <span>{item.q}</span>
+              <Plus aria-hidden="true" />
+            </summary>
+            <p>
+              {item.a}
+              {item.link && (
+                <>
+                  {' '}
+                  <a class="text-link" href={item.link.href} target="_blank" rel="noopener">
+                    {item.link.label}
+                    <span class="visually-hidden">(öffnet in neuem Tab)</span>
+                  </a>
+                </>
+              )}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    background: var(--sage);
+  }
+
+  .faq__grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 1000px) {
+    .faq__grid {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+
+  .faq__item {
+    border-top: 1px solid rgba(23, 26, 23, 0.15);
+  }
+
+  .faq__item:last-child {
+    border-bottom: 1px solid rgba(23, 26, 23, 0.15);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 4.25rem;
+    padding: 1.1rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    font-weight: 650;
+    font-stretch: 92%;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary :global(svg) {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--accent);
+    transition: transform 0.3s var(--ease);
+  }
+
+  details[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+
+  .faq__item p {
+    padding: 0 2.5rem 1.5rem 0;
+    color: var(--ink-soft);
+    max-width: 44rem;
+  }
+</style>

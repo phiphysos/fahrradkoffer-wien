@@ -1,0 +1,142 @@
+---
+import { MessageSquareText, Handshake, Route } from '@lucide/astro';
+import Topo from './Topo.astro';
+
+const steps = [
+  { icon: MessageSquareText, title: 'Anfragen', text: 'Reisezeitraum und Anzahl der Koffer mitteilen.' },
+  { icon: Handshake, title: 'Abholen', text: 'Koffer nach Vereinbarung beim Westbahnhof übernehmen.' },
+  { icon: Route, title: 'Losreisen', text: 'Fahrrad sicher verpacken und die Reise genießen.' },
+];
+---
+
+<section id="ablauf" class="section steps on-dark" aria-labelledby="steps-title">
+  <Topo class="steps__topo" />
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>So funktioniert’s</p>
+        <h2 id="steps-title" class="h2" data-reveal style="--reveal-delay: 60">In drei Schritten<br />zur Radreise.</h2>
+      </div>
+      <p class="lead" data-reveal style="--reveal-delay: 120">
+        Kein Buchungssystem, keine Hotline – du schreibst eine kurze Anfrage, wir melden uns persönlich und bestätigen
+        die Verfügbarkeit für deinen Zeitraum.
+      </p>
+    </div>
+
+    <ol class="steps__list" role="list">
+      {
+        steps.map((step, i) => (
+          <li class="step" data-reveal style={`--reveal-delay: ${i * 120}`}>
+            <div class="step__head">
+              <span class="step__num tabular" aria-hidden="true">
+                0{i + 1}
+              </span>
+              <span class="step__icon">
+                <step.icon aria-hidden="true" stroke-width={1.6} />
+              </span>
+            </div>
+            <h3 class="step__title">
+              <span class="visually-hidden">Schritt {i + 1}: </span>
+              {step.title}
+            </h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    position: relative;
+    overflow: hidden;
+    background: var(--accent);
+    isolation: isolate;
+  }
+
+  .steps :global(.steps__topo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.07;
+    z-index: -1;
+  }
+
+  .steps .lead {
+    color: rgba(238, 240, 234, 0.78);
+  }
+
+  .steps__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 2.5rem;
+    counter-reset: step;
+  }
+
+  @media (min-width: 860px) {
+    .steps__list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+  }
+
+  .step {
+    position: relative;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(238, 240, 234, 0.25);
+  }
+
+  .step::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 3.5rem;
+    height: 2px;
+    background: var(--on-dark);
+  }
+
+  .step__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: clamp(1.75rem, 5vw, 4rem);
+  }
+
+  .step__num {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 3rem + 4vw, 6.5rem);
+    font-weight: 300;
+    font-stretch: 82%;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: rgba(238, 240, 234, 0.9);
+  }
+
+  .step__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    border: 1px solid rgba(238, 240, 234, 0.3);
+  }
+
+  .step__icon :global(svg) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .step__title {
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .step p {
+    color: rgba(238, 240, 234, 0.78);
+    max-width: 22rem;
+  }
+</style>

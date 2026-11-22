@@ -1,0 +1,36 @@
+---
+import { Picture } from 'astro:assets';
+import { getPhoto, type PhotoSlot } from '../lib/photos';
+
+interface Props {
+  slot: PhotoSlot;
+  alt: string;
+  sizes: string;
+  widths?: number[];
+  eager?: boolean;
+  class?: string;
+}
+
+const { slot, alt, sizes, widths = [480, 768, 1080, 1440, 2000], eager = false, class: className } = Astro.props;
+const photo = getPhoto(slot);
+const usableWidths = photo ? widths.filter((w) => w <= photo.width) : [];
+if (photo && usableWidths.length === 0) usableWidths.push(photo.width);
+---
+
+{
+  photo ? (
+    <Picture
+      src={photo}
+      alt={alt}
+      widths={usableWidths}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding={eager ? 'sync' : 'async'}
+      class={className}
+    />
+  ) : (
+    <slot />
+  )
+}

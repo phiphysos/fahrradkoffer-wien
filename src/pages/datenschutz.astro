@@ -1,0 +1,53 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { contact, legal } from '../../site.config';
+
+const owner = [legal.ownerName, legal.street, legal.postalCity].filter(Boolean).join(', ');
+---
+
+<Legal title="Datenschutz" path="datenschutz/">
+  <h2>Verantwortlich</h2>
+  <p>
+    <span class:list={{ todo: !owner }}>{owner || '[Name und Anschrift in site.config.ts eintragen]'}</span><br />
+    E-Mail: <a href={`mailto:${contact.email}`}>{contact.email}</a>
+  </p>
+
+  <h2>Kurz zusammengefasst</h2>
+  <ul>
+    <li>Diese Website setzt keine Cookies und verwendet keine Analyse- oder Tracking-Dienste.</li>
+    <li>Schriften und Grafiken werden direkt von dieser Website geladen, nicht von Drittanbietern.</li>
+    <li>Das Anfrageformular speichert und versendet keine Daten – es bereitet lediglich eine E-Mail in deinem E-Mail-Programm vor.</li>
+  </ul>
+
+  <h2>Hosting über GitHub Pages</h2>
+  <p>
+    Diese Website wird über GitHub Pages bereitgestellt (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA
+    94107, USA). Beim Aufruf der Seiten verarbeitet GitHub technisch notwendige Daten wie deine IP-Adresse, Datum und
+    Uhrzeit des Zugriffs sowie Informationen zu Browser und Betriebssystem, um die Website auszuliefern und deren
+    Sicherheit zu gewährleisten. Dabei kann es zu einer Übermittlung in die USA kommen. Rechtsgrundlage ist unser
+    berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO).
+    Weitere Informationen findest du in der
+    <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>.
+  </p>
+
+  <h2>Anfragen per E-Mail</h2>
+  <p>
+    Wenn du uns eine Anfrage per E-Mail sendest, verarbeiten wir die darin enthaltenen Angaben (z. B. Name,
+    E-Mail-Adresse, Mietzeitraum, Nachricht), um deine Anfrage zu beantworten und die Vermietung abzuwickeln
+    (Art. 6 Abs. 1 lit. b DSGVO). Wir löschen diese Daten, sobald sie dafür nicht mehr benötigt werden und keine
+    gesetzlichen Aufbewahrungspflichten entgegenstehen. Für den Versand ist dein eigener E-Mail-Anbieter zuständig.
+  </p>
+
+  <h2>Externe Links</h2>
+  <p>
+    Der Link „In Google Maps öffnen“ führt zu Google. Erst wenn du ihn anklickst, werden Daten an Google übertragen;
+    dafür gilt die Datenschutzerklärung von Google.
+  </p>
+
+  <h2>Deine Rechte</h2>
+  <p>
+    Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und
+    Widerspruch. Wende dich dazu einfach per E-Mail an uns. Außerdem kannst du dich bei der Österreichischen
+    Datenschutzbehörde beschweren (<a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a>).
+  </p>
+</Legal>

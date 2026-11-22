@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Benefits from '../components/Benefits.astro';
+import Product from '../components/Product.astro';
+import Pricing from '../components/Pricing.astro';
+import Steps from '../components/Steps.astro';
+import Inquiry from '../components/Inquiry.astro';
+import Location from '../components/Location.astro';
+import Faq from '../components/Faq.astro';
+import StickyCta from '../components/StickyCta.astro';
+---
+
+<Base structuredData>
+  <Hero />
+  <Benefits />
+  <Product />
+  <Pricing />
+  <Steps />
+  <Inquiry />
+  <Location />
+  <Faq />
+  <StickyCta slot="after" />
+</Base>

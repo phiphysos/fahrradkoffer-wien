@@ -1,0 +1,207 @@
+---
+import { MapPin, TrainFront, Clock, ArrowUpRight } from '@lucide/astro';
+import { location } from '../../site.config';
+import Photo from './Photo.astro';
+---
+
+<section id="abholung" class="section location" aria-labelledby="location-title">
+  <div class="container location__grid">
+    <div class="location__copy">
+      <p class="eyebrow" data-reveal>Abholung</p>
+      <h2 id="location-title" class="h2" data-reveal style="--reveal-delay: 60">Abholung mitten in Wien.</h2>
+      <p class="lead" data-reveal style="--reveal-delay: 120">
+        Die Übergabe findet persönlich in der Nähe des Westbahnhofs statt – gut erreichbar, egal ob du mit Öffis, Rad
+        oder Auto kommst.
+      </p>
+
+      <address class="location__address" data-reveal style="--reveal-delay: 160">
+        <MapPin aria-hidden="true" />
+        <span>
+          <strong>{location.name}</strong>
+          {location.postalCode} {location.city}, {location.country}
+        </span>
+      </address>
+
+      <ul class="location__facts" role="list" data-reveal style="--reveal-delay: 200">
+        <li>
+          <TrainFront aria-hidden="true" stroke-width={1.6} />
+          {location.transit}
+        </li>
+        <li>
+          <Clock aria-hidden="true" stroke-width={1.6} />
+          Treffpunkt und Uhrzeit vereinbaren wir individuell per E-Mail.
+        </li>
+      </ul>
+
+      <a class="btn btn--dark" href={location.mapsUrl} target="_blank" rel="noopener" data-reveal style="--reveal-delay: 240">
+        In Google Maps öffnen <ArrowUpRight aria-hidden="true" />
+        <span class="visually-hidden">(öffnet in neuem Tab)</span>
+      </a>
+    </div>
+
+    <div class="location__visual" data-reveal style="--reveal-delay: 120">
+      <Photo slot="abholung" alt="Wien Westbahnhof" sizes="(min-width: 1000px) 50vw, calc(100vw - 2.25rem)">
+        <svg class="map" viewBox="0 0 600 640" role="img" aria-labelledby="map-title">
+          <title id="map-title">Schematische Karte: Abholung beim Wiener Westbahnhof</title>
+          <defs>
+            <pattern id="map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0V40" fill="none" stroke="currentColor" stroke-opacity="0.07" stroke-width="1"></path>
+            </pattern>
+          </defs>
+          <rect width="600" height="640" fill="url(#map-grid)"></rect>
+
+          <!-- Straßenraster (schematisch) -->
+          <g fill="none" stroke="#fff" stroke-linecap="round">
+            <path d="M-20 150 L620 110" stroke-width="10"></path>
+            <path d="M-20 470 L620 520" stroke-width="10"></path>
+            <path d="M120 -20 L160 660" stroke-width="8"></path>
+            <path d="M470 -20 L440 660" stroke-width="8"></path>
+            <path d="M330 300 C 420 260, 520 240, 640 200" stroke-width="16"></path>
+            <path d="M380 -20 C 360 160, 360 420, 400 660" stroke-width="22"></path>
+          </g>
+
+          <!-- Gleise (schematisch) -->
+          <g fill="none" stroke="currentColor" stroke-opacity="0.35">
+            <path d="M-20 360 L300 330" stroke-width="2"></path>
+            <path d="M-20 384 L300 352" stroke-width="2"></path>
+            <path d="M-20 408 L300 374" stroke-width="2"></path>
+            <path d="M-20 372 L300 341 M-20 396 L300 363" stroke-width="10" stroke-dasharray="1.5 12" stroke-opacity="0.25"></path>
+          </g>
+
+          <!-- Bahnhof -->
+          <rect x="268" y="296" width="96" height="104" rx="14" fill="#244C3A" fill-opacity="0.12" stroke="#244C3A" stroke-opacity="0.4" stroke-width="2"></rect>
+
+          <!-- U-Bahn -->
+          <g style="font-family: var(--font-body)" font-weight="700" font-size="15" text-anchor="middle">
+            <circle cx="402" cy="276" r="18" fill="#171A17"></circle>
+            <text x="402" y="281" fill="#fff">U3</text>
+            <circle cx="402" cy="420" r="18" fill="#171A17"></circle>
+            <text x="402" y="425" fill="#fff">U6</text>
+          </g>
+
+          <!-- Pin -->
+          <g class="map__pin">
+            <circle cx="316" cy="348" r="46" fill="#244C3A" fill-opacity="0.14"></circle>
+            <circle cx="316" cy="348" r="12" fill="#244C3A" stroke="#fff" stroke-width="5"></circle>
+          </g>
+
+          <g style="font-family: var(--font-body)">
+            <rect x="206" y="196" width="190" height="64" rx="16" fill="#171A17"></rect>
+            <text x="226" y="224" fill="#fff" font-size="18" font-weight="700">Westbahnhof</text>
+            <text x="226" y="246" fill="#fff" fill-opacity="0.7" font-size="14">1150 Wien</text>
+            <path d="M306 260 L316 272 L326 260 Z" fill="#171A17"></path>
+          </g>
+
+          <text x="24" y="616" style="font-family: var(--font-body)" font-size="13" fill="currentColor" fill-opacity="0.55">
+            Schematisch · Genauer Treffpunkt nach Absprache
+          </text>
+        </svg>
+      </Photo>
+    </div>
+  </div>
+</section>
+
+<style>
+  .location__grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1000px) {
+    .location__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .location__copy .lead {
+    margin-top: 1.5rem;
+  }
+
+  .location__address {
+    display: flex;
+    gap: 0.85rem;
+    margin-top: 2rem;
+    font-style: normal;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+
+  .location__address strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-stretch: 88%;
+    letter-spacing: -0.02em;
+  }
+
+  .location__address > :global(svg) {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.3rem;
+    color: var(--accent);
+  }
+
+  .location__facts {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.75rem 0 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+  }
+
+  .location__facts li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .location__facts :global(svg) {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.2rem;
+    color: var(--accent);
+  }
+
+  .location__visual {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--sage);
+    color: var(--ink);
+  }
+
+  .location__visual :global(img) {
+    width: 100%;
+    aspect-ratio: 15 / 16;
+    object-fit: cover;
+  }
+
+  .map {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .map__pin circle:first-child {
+      transform-origin: 316px 348px;
+      animation: pulse 2.8s var(--ease) infinite;
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+</style>

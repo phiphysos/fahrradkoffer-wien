@@ -1,0 +1,19 @@
+---
+/** Dekorative Höhenlinien (siehe src/pages/topo.svg.ts). */
+import { url } from '../lib/url';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<img class:list={['topo', className]} src={url('topo.svg')} alt="" aria-hidden="true" decoding="async" width="1600" height="1120" />
+
+<style>
+  .topo {
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

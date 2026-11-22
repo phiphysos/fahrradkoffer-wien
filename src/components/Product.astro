@@ -1,0 +1,319 @@
+---
+import { Info, CirclePlay, ArrowUpRight } from '@lucide/astro';
+import { product } from '../../site.config';
+import { getPhoto } from '../lib/photos';
+import { num } from '../lib/url';
+import CaseDrawing from './CaseDrawing.astro';
+import Photo from './Photo.astro';
+
+const hasPhoto = Boolean(getPhoto('produkt'));
+const { outer, inner } = product;
+const dims = [
+  { label: 'Länge', outer: outer.length, inner: inner.length },
+  { label: 'Breite', outer: outer.width, inner: inner.width },
+  { label: 'Tiefe', outer: outer.depth, inner: inner.depth },
+];
+---
+
+<section id="koffer" class="section product on-dark" aria-labelledby="product-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Der Koffer</p>
+        <h2 id="product-title" class="h2" data-reveal style="--reveal-delay: 60">{product.name}</h2>
+      </div>
+      <div class="product__intro" data-reveal style="--reveal-delay: 120">
+        <p class="lead">
+          Der Fahrradkoffer für deine Radreise – mit Rollen, Schloss und viel Platz. Geeignet für Rennräder, Gravelbikes,
+          Triathlonräder und Mountainbikes bis 29 Zoll – abhängig von den Maßen deines Rades.
+        </p>
+        <ul class="chips" role="list" aria-label="Geeignet für">
+          {product.bikeTypes.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    {
+      hasPhoto && (
+        <div class="product__photo" data-reveal>
+          <Photo
+            slot="produkt"
+            alt={`${product.name} – Fahrradkoffer zum Mieten in Wien`}
+            sizes="(min-width: 1440px) 1312px, calc(100vw - 2.25rem)"
+          />
+        </div>
+      )
+    }
+
+    <div class="product__drawing" data-reveal>
+      <CaseDrawing variant="views" />
+    </div>
+
+    <div class="product__grid">
+      <div class="panel" data-reveal>
+        <h3 class="panel__title">Ausstattung</h3>
+        <dl class="specs">
+          <div>
+            <dt>Verfügbar</dt>
+            <dd>{product.units} Koffer</dd>
+          </div>
+          <div>
+            <dt>Eigengewicht</dt>
+            <dd class="tabular">{num(product.weightKg, 1)} kg</dd>
+          </div>
+          <div>
+            <dt>Schloss</dt>
+            <dd>inklusive</dd>
+          </div>
+          <div>
+            <dt>Packanleitung</dt>
+            <dd>
+              {
+                product.packingVideoUrl ? (
+                  <a class="text-link" href={product.packingVideoUrl} target="_blank" rel="noopener">
+                    <CirclePlay aria-hidden="true" /> Video ansehen
+                    <span class="visually-hidden">(öffnet in neuem Tab)</span>
+                  </a>
+                ) : (
+                  'Video verfügbar'
+                )
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Zustand</dt>
+            <dd>{product.condition}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="panel" data-reveal style="--reveal-delay: 100">
+        <h3 class="panel__title">Maße</h3>
+        <table class="dims tabular">
+          <caption class="visually-hidden">Außen- und Innenmaße in Millimetern</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Maß</span></th>
+              <th scope="col">Außen</th>
+              <th scope="col">Innen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              dims.map((d) => (
+                <tr>
+                  <th scope="row">{d.label}</th>
+                  <td>
+                    {num(d.outer)}
+                    <span class="unit">mm</span>
+                  </td>
+                  <td>
+                    {num(d.inner)}
+                    <span class="unit">mm</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note" data-reveal style="--reveal-delay: 200" aria-label="Hinweis zur Kompatibilität">
+        <Info aria-hidden="true" />
+        <div>
+          <h3 class="note__title">Passt dein Rad?</h3>
+          <p>
+            Bitte vergleiche vor der Anfrage die Innenmaße mit deinem Rad – vor allem bei großen Rahmen, breiten Lenkern
+            oder Aufliegern. Im Zweifel frag einfach nach, wir klären das gemeinsam.
+          </p>
+          <a class="text-link" href="#anfrage">Zur Anfrage <ArrowUpRight aria-hidden="true" /></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .product__intro {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .product__intro {
+      justify-items: end;
+    }
+    .product__intro .chips {
+      justify-content: flex-end;
+    }
+  }
+
+  .chips {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 38rem;
+  }
+
+  .chips li {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line-dark);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    color: var(--on-dark);
+  }
+
+  .product__photo {
+    margin-bottom: 1rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .product__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .product__drawing {
+    padding: clamp(1.5rem, 5vw, 4.5rem) clamp(1rem, 5vw, 4.5rem);
+    border-radius: var(--radius-lg);
+    background: var(--dark-soft);
+    border: 1px solid var(--line-dark);
+    color: var(--on-dark);
+    --draw-bg: var(--dark-soft);
+  }
+
+  .product__grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 760px) {
+    .product__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .note {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .product__grid {
+      grid-template-columns: 1fr 1fr 0.9fr;
+    }
+    .note {
+      grid-column: auto;
+    }
+  }
+
+  .panel {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius);
+    background: var(--dark-soft);
+    border: 1px solid var(--line-dark);
+  }
+
+  .panel__title {
+    margin-bottom: 1.25rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-dark-soft);
+  }
+
+  .specs div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--line-dark);
+  }
+
+  .specs dt {
+    color: var(--on-dark-soft);
+  }
+
+  .specs dd {
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .specs .text-link {
+    color: var(--accent-soft);
+  }
+
+  .dims {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .dims th,
+  .dims td {
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--line-dark);
+    text-align: right;
+  }
+
+  .dims thead th {
+    border-top: 0;
+    padding-top: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--on-dark-soft);
+  }
+
+  .dims tbody th {
+    text-align: left;
+    font-weight: 400;
+    color: var(--on-dark-soft);
+  }
+
+  .dims td {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    font-weight: 650;
+    font-stretch: 88%;
+    padding-left: 1rem;
+  }
+
+  .unit {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--on-dark-soft);
+  }
+
+  .note {
+    display: flex;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .note > :global(svg) {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.1rem;
+  }
+
+  .note__title {
+    font-size: 1.375rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .note p {
+    color: rgba(247, 247, 242, 0.82);
+    margin-bottom: 1rem;
+    line-height: 1.55;
+  }
+</style>

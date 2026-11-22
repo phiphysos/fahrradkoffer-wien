@@ -1,0 +1,79 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import { pricing } from '../../site.config';
+import { euro } from '../lib/url';
+---
+
+<div class="sticky-cta" data-sticky-cta aria-hidden="true">
+  <div class="sticky-cta__inner">
+    <p class="sticky-cta__price">
+      <span>ab</span>
+      <strong class="tabular">{euro(pricing.day)}</strong>
+      <span>/ Tag</span>
+    </p>
+    <a class="btn btn--primary" href="#anfrage" tabindex="-1">Jetzt anfragen <ArrowRight aria-hidden="true" /></a>
+  </div>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 0 0.75rem calc(0.75rem + env(safe-area-inset-bottom));
+    pointer-events: none;
+    transform: translateY(calc(100% + 1rem));
+    transition: transform 0.45s var(--ease);
+  }
+
+  .sticky-cta.is-visible {
+    transform: none;
+  }
+
+  .sticky-cta__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 30rem;
+    margin-inline: auto;
+    padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+    border-radius: 999px;
+    background: rgba(23, 26, 23, 0.92);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    color: var(--on-dark);
+    box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
+    pointer-events: auto;
+  }
+
+  .sticky-cta__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-size: 0.8125rem;
+    color: var(--on-dark-soft);
+    white-space: nowrap;
+  }
+
+  .sticky-cta__price strong {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    font-stretch: 88%;
+    color: var(--on-dark);
+  }
+
+  .sticky-cta .btn {
+    min-height: 3rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 960px) {
+    .sticky-cta {
+      display: none;
+    }
+  }
+</style>

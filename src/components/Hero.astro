@@ -1,0 +1,250 @@
+---
+import { ArrowRight, MapPin } from '@lucide/astro';
+import { location, pricing, product } from '../../site.config';
+import { euro, num } from '../lib/url';
+import CaseDrawing from './CaseDrawing.astro';
+import Photo from './Photo.astro';
+import Topo from './Topo.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="hero__head">
+      <div>
+        <p class="hero__meta" data-reveal>
+          <MapPin aria-hidden="true" />
+          {location.name}
+          <span class="hero__meta-extra"><span aria-hidden="true">·</span> {product.name}</span>
+        </p>
+        <h1 id="hero-title" class="hero__title" data-reveal style="--reveal-delay: 80">
+          <span class="hero__line">Dein Rad.</span>
+          <span class="hero__line">Deine Reise.</span>
+          <span class="hero__line hero__line--accent">Unser Koffer.</span>
+          <span class="hero__sub">Fahrradkoffer mieten in Wien.</span>
+        </h1>
+      </div>
+
+      <div class="hero__aside" data-reveal style="--reveal-delay: 180">
+        <p class="hero__text">
+          Miete einen hochwertigen {product.name} für deine nächste Radreise. Sicher, unkompliziert und direkt beim Wiener
+          Westbahnhof abholbar.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#anfrage">Jetzt anfragen <ArrowRight aria-hidden="true" /></a>
+          <a class="btn btn--ghost" href="#koffer">Mehr erfahren</a>
+        </div>
+      </div>
+    </div>
+
+    <figure class="hero__media" data-reveal style="--reveal-delay: 260">
+      <Photo
+        slot="hero"
+        alt={`${product.name} Fahrradkoffer`}
+        sizes="(min-width: 1440px) 1312px, calc(100vw - 2.25rem)"
+        eager
+        class="hero__photo"
+      >
+        <div class="hero__placeholder">
+          <Topo class="hero__topo" />
+          <CaseDrawing variant="hero" class="hero__drawing" />
+        </div>
+      </Photo>
+
+      <figcaption class="hero__facts">
+        <span><strong class="tabular">{euro(pricing.day)}</strong> / Tag</span>
+        <span><strong class="tabular">{euro(pricing.week)}</strong> / Woche</span>
+        <span class="hero__fact-hide-xs"><strong class="tabular">{num(product.weightKg, 1)} kg</strong> leicht</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(1.75rem, 5vw, 4rem);
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .hero__head {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .hero__meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    padding: 0.45rem 0.9rem 0.45rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 359px) {
+    .hero__meta-extra {
+      display: none;
+    }
+  }
+
+  .hero__meta :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent);
+  }
+
+  .hero__title {
+    font-size: clamp(3.1rem, 0.9rem + 9.6vw, 9.25rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    font-weight: 750;
+    font-stretch: 82%;
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  .hero__line--accent {
+    color: var(--accent);
+  }
+
+  .hero__sub {
+    display: block;
+    margin-top: clamp(1rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+    font-weight: 600;
+    font-stretch: 92%;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .hero__text {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 34rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  @media (max-width: 479px) {
+    .hero__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__head {
+      grid-template-columns: 1fr minmax(20rem, 25rem);
+      align-items: end;
+    }
+    .hero__aside {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  /* Bildfläche */
+  .hero__media {
+    position: relative;
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--accent);
+    aspect-ratio: 1 / 1;
+    isolation: isolate;
+  }
+
+  @media (min-width: 640px) {
+    .hero__media {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__media {
+      aspect-ratio: 16 / 8.2;
+    }
+  }
+
+  .hero__media :global(.hero__photo),
+  .hero__media :global(picture),
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    padding: 7% 5% 20%;
+    color: var(--on-dark);
+    background:
+      radial-gradient(120% 90% at 20% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+      var(--accent);
+  }
+
+  @media (min-width: 640px) {
+    .hero__placeholder {
+      padding: 4.5% 8% 8.5%;
+    }
+  }
+
+  .hero__placeholder :global(.hero__topo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.09;
+    z-index: -1;
+  }
+
+  .hero__placeholder :global(.hero__drawing) {
+    width: 100%;
+    height: 100%;
+    --draw: #eef0ea;
+    --draw-accent: #b9d6c3;
+    --draw-bg: var(--accent);
+  }
+
+  .hero__facts {
+    position: absolute;
+    left: clamp(0.75rem, 2vw, 1.5rem);
+    bottom: clamp(0.75rem, 2vw, 1.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .hero__facts span {
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(247, 247, 242, 0.94);
+    color: var(--ink);
+    font-size: 0.8125rem;
+    box-shadow: 0 4px 16px -6px rgba(0, 0, 0, 0.25);
+  }
+
+  .hero__facts strong {
+    font-weight: 700;
+  }
+
+  @media (max-width: 379px) {
+    .hero__fact-hide-xs {
+      display: none;
+    }
+  }
+</style>

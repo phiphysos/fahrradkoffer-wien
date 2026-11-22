@@ -1,0 +1,298 @@
+---
+/**
+ * Schematische Zeichnung des Koffers – Platzhalter, solange kein eigenes Foto
+ * in src/assets/photos/ liegt. Maße kommen aus site.config.ts.
+ *
+ *  variant="hero"  → Vorderansicht mit eingezeichnetem Rahmen
+ *  variant="views" → Vorder- und Seitenansicht mit Außen- und Innenmaßen
+ */
+import { product } from '../../site.config';
+import { num } from '../lib/url';
+
+interface Props {
+  variant?: 'hero' | 'views';
+  class?: string;
+}
+const { variant = 'hero', class: className } = Astro.props;
+const { outer, inner } = product;
+const mm = (v: number) => `${num(v)} mm`;
+---
+
+{
+  variant === 'hero' ? (
+    <svg class:list={['drawing', 'drawing--hero', className]} viewBox="0 0 1600 1120" role="img" aria-labelledby="drawing-hero-title">
+      <title id="drawing-hero-title">
+        {`Schematische Darstellung des ${product.name}: ${mm(outer.length)} lang, ${mm(outer.width)} hoch, mit verpacktem Rennradrahmen.`}
+      </title>
+
+      {/* Bemaßung oben */}
+      <g class="dim">
+        <path d="M120 58 V82 M1480 58 V82 M120 70 H1480" />
+        <text x="800" y="78" text-anchor="middle">{mm(outer.length)}</text>
+      </g>
+      {/* Bemaßung rechts */}
+      <g class="dim">
+        <path d="M1518 120 H1542 M1518 974 H1542 M1530 120 V974" />
+        <text x="1530" y="547" text-anchor="middle" dominant-baseline="central" transform="rotate(-90 1530 547)">
+          {mm(outer.width)}
+        </text>
+      </g>
+
+      {/* Koffer */}
+      <path class="line line--strong" d="M720 120 v-20 a14 14 0 0 1 14 -14 h132 a14 14 0 0 1 14 14 v20" />
+      <rect class="line line--strong case" x="120" y="120" width="1360" height="854" rx="70" />
+      <rect class="line line--dash" x="152" y="152" width="1296" height="790" rx="46" />
+
+      {/* Laufräder, separat verstaut */}
+      <g class="line line--faint">
+        <circle cx="560" cy="560" r="320" />
+        <circle cx="560" cy="560" r="290" />
+        <circle cx="560" cy="560" r="22" />
+        <circle cx="1040" cy="560" r="320" />
+        <circle cx="1040" cy="560" r="290" />
+        <circle cx="1040" cy="560" r="22" />
+      </g>
+
+      {/* Rahmen */}
+      <g class="line line--bike">
+        <path d="M355 720 L760 780 L607 262 Z" />
+        <path d="M607 262 L1145 220 L1189 363 L760 780" />
+        <path d="M1189 363 L1297 717" />
+        <path d="M1145 220 L1135 188 M1135 188 L1222 176 c40 -2 66 18 68 52 c2 36 -22 62 -58 66" />
+        <path d="M607 262 L588 196 M538 186 h112 c8 0 8 -14 0 -16 l-96 -6 c-14 0 -22 10 -16 22 z" />
+        <circle cx="760" cy="780" r="92" />
+        <circle cx="760" cy="780" r="14" />
+        <path d="M760 780 L846 854" />
+      </g>
+
+      {/* Schloss */}
+      <g class="line line--strong">
+        <rect x="1452" y="530" width="56" height="48" rx="8" />
+        <path d="M1464 530 v-14 a16 16 0 0 1 32 0 v14" />
+      </g>
+
+      {/* Rollen */}
+      <g class="line line--strong">
+        <path d="M168 974 v12 M312 974 v12" />
+        <circle cx="168" cy="1010" r="24" />
+        <circle cx="312" cy="1010" r="24" />
+      </g>
+
+      {/* Beschriftungen */}
+      <g class="callout">
+        <path d="M1508 600 L1560 650" />
+        <text x="1560" y="684" text-anchor="end">Schloss inkl.</text>
+      </g>
+      <g class="callout">
+        <path d="M340 1010 H420" />
+        <text x="432" y="1019">Rollen</text>
+      </g>
+      <text class="caption" x="1480" y="1022" text-anchor="end">
+        {`${product.name} · ${num(product.weightKg, 1)} kg`}
+      </text>
+      <text class="caption caption--soft" x="1480" y="1064" text-anchor="end">
+        Schematische Darstellung
+      </text>
+    </svg>
+  ) : (
+    <svg class:list={['drawing', 'drawing--views', className]} viewBox="0 0 2000 1200" role="img" aria-labelledby="drawing-views-title">
+      <title id="drawing-views-title">
+        {`Vorder- und Seitenansicht mit Maßen. Außen: ${mm(outer.length)} × ${mm(outer.width)} × ${mm(outer.depth)}. Innen: ${mm(inner.length)} × ${mm(inner.width)} × ${mm(inner.depth)}.`}
+      </title>
+
+      {/* Vorderansicht */}
+      <g class="dim">
+        <path d="M80 78 V102 M1440 78 V102 M80 90 H1440" />
+        <text x="760" y="98" text-anchor="middle">{mm(outer.length)}</text>
+      </g>
+      <g class="dim">
+        <path d="M18 140 H42 M18 994 H42 M30 140 V994" />
+        <text x="30" y="567" text-anchor="middle" dominant-baseline="central" transform="rotate(-90 30 567)">
+          {mm(outer.width)}
+        </text>
+      </g>
+      <rect class="line line--strong case" x="80" y="140" width="1360" height="854" rx="70" />
+      <rect class="line line--inner" x="85" y="162" width="1350" height="810" rx="62" />
+      <text class="inner-label" x="760" y="560" text-anchor="middle">innen</text>
+      <text class="inner-value" x="760" y="616" text-anchor="middle">
+        {`${num(inner.length)} × ${num(inner.width)} mm`}
+      </text>
+      <text class="caption caption--soft" x="80" y="1060">Vorderansicht</text>
+
+      {/* Seitenansicht */}
+      <g class="dim">
+        <path d="M1600 78 V102 M1897 78 V102 M1600 90 H1897" />
+        <text x="1748" y="98" text-anchor="middle">{mm(outer.depth)}</text>
+      </g>
+      <rect class="line line--strong case" x="1600" y="140" width="297" height="854" rx="44" />
+      <rect class="line line--inner" x="1608" y="162" width="280" height="810" rx="38" />
+      <text class="inner-value inner-value--sm" x="1748" y="567" text-anchor="middle" dominant-baseline="central" transform="rotate(-90 1748 567)">
+        {`innen ${num(inner.depth)} mm`}
+      </text>
+      <g class="line line--strong">
+        <circle cx="1650" cy="1030" r="24" />
+        <path d="M1650 994 v12" />
+      </g>
+      <text class="caption caption--soft" x="1897" y="1060" text-anchor="end">Seitenansicht</text>
+      <text class="caption caption--soft caption--note" x="1897" y="1120" text-anchor="end">Schematische Darstellung</text>
+    </svg>
+  )
+}
+
+<style>
+  .drawing {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    --draw: currentColor;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--draw);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .line--strong {
+    stroke-width: 3.5;
+  }
+
+  .case {
+    fill: color-mix(in srgb, var(--draw) 4%, transparent);
+  }
+
+  .line--dash {
+    stroke-width: 2;
+    stroke-dasharray: 2 14;
+    opacity: 0.55;
+  }
+
+  .line--inner {
+    stroke-width: 2;
+    stroke-dasharray: 12 10;
+    opacity: 0.6;
+  }
+
+  .line--faint {
+    stroke-width: 2;
+    opacity: 0.28;
+  }
+
+  .line--bike {
+    stroke: var(--draw-accent, var(--draw));
+    stroke-width: 7;
+    opacity: 0.9;
+  }
+
+  .dim path,
+  .callout path {
+    fill: none;
+    stroke: var(--draw);
+    stroke-width: 1.6;
+    opacity: 0.55;
+  }
+
+  /* Hintergrundfarbiger Rand um Texte – unterbricht Maßlinien sauber */
+  .dim text,
+  .callout text,
+  .inner-value--sm {
+    stroke: var(--draw-bg, transparent);
+    stroke-width: 14px;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+  }
+
+  .dim text,
+  .callout text,
+  .caption,
+  .inner-label,
+  .inner-value {
+    fill: var(--draw);
+    font-family: var(--font-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dim text {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .callout text {
+    font-size: 26px;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .caption {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .caption--soft {
+    font-size: 24px;
+    font-weight: 500;
+    opacity: 0.6;
+  }
+
+  .inner-label {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .inner-value {
+    font-family: var(--font-display);
+    font-size: 60px;
+    font-weight: 700;
+    font-stretch: 88%;
+  }
+
+  .inner-value--sm {
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  /* Kleine Bildschirme: Beschriftungen größer, Nebensächliches ausblenden */
+  @media (max-width: 639px) {
+    .drawing--hero .dim text {
+      font-size: 60px;
+    }
+    .drawing--hero .callout {
+      display: none;
+    }
+    .drawing--hero .caption {
+      font-size: 54px;
+    }
+    .drawing--hero .caption--soft {
+      font-size: 44px;
+      transform: translateY(36px);
+    }
+    .drawing--views .dim text {
+      font-size: 84px;
+    }
+    .drawing--views .inner-label {
+      font-size: 56px;
+      transform: translateY(-30px);
+    }
+    .drawing--views .inner-value:not(.inner-value--sm) {
+      font-size: 104px;
+      transform: translateY(20px);
+    }
+    .drawing--views .inner-value--sm {
+      font-size: 68px;
+    }
+    .drawing--views .caption--soft {
+      font-size: 60px;
+      transform: translateY(14px);
+    }
+    .drawing--views .caption--note {
+      transform: translateY(52px);
+    }
+  }
+</style>

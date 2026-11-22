@@ -1,0 +1,298 @@
+---
+import { ArrowRight, Check, ShieldCheck, MapPin, PackageX, Luggage } from '@lucide/astro';
+import { location, pricing, product } from '../../site.config';
+import { euro } from '../lib/url';
+
+const perDayInWeek = pricing.week / 7;
+
+const plans = [
+  {
+    id: 'tag',
+    name: 'Tagesmiete',
+    price: pricing.day,
+    unit: 'Tag',
+    text: 'Für kurze Trips, Rennwochenenden und spontane Ausfahrten.',
+    features: ['Flexibel tageweise', 'Schloss inklusive', 'Persönliche Übergabe'],
+    cta: 'Tagesmiete anfragen',
+    featured: false,
+  },
+  {
+    id: 'woche',
+    name: 'Wochenmiete',
+    price: pricing.week,
+    unit: 'Woche',
+    text: 'Für Trainingslager, Radurlaub und längere Reisen.',
+    features: [
+      `Entspricht ${euro(perDayInWeek, 2)} pro Tag`,
+      `Günstiger als 7 Einzeltage (${euro(pricing.day * 7)})`,
+      'Schloss inklusive',
+    ],
+    cta: 'Wochenmiete anfragen',
+    featured: pricing.week < pricing.day * 7,
+  },
+];
+
+const info = [
+  { icon: ShieldCheck, title: `${euro(pricing.deposit)} Kaution`, text: 'pro Koffer, rückerstattbar' },
+  { icon: MapPin, title: 'Abholung in Wien', text: `beim Westbahnhof, ${location.postalCode} ${location.city}` },
+  { icon: PackageX, title: 'Kein Versand', text: 'nur persönliche Übergabe' },
+  { icon: Luggage, title: `${product.units} Koffer`, text: 'einzeln oder gemeinsam mietbar' },
+];
+---
+
+<section id="preise" class="section pricing" aria-labelledby="pricing-title">
+  <div class="container">
+    <div class="section-head pricing__head">
+      <p class="eyebrow" data-reveal>Preise</p>
+      <h2 id="pricing-title" class="h2" data-reveal style="--reveal-delay: 60">Einfach. Transparent. Fair.</h2>
+      <p class="lead" data-reveal style="--reveal-delay: 120">
+        Klare Preise pro Koffer – plus eine Kaution, die du bei der Rückgabe zurückbekommst.
+      </p>
+    </div>
+
+    <div class="plans">
+      {
+        plans.map((plan, i) => (
+          <article
+            class:list={['plan', { 'plan--featured': plan.featured }]}
+            aria-labelledby={`plan-${plan.id}`}
+            data-reveal
+            style={`--reveal-delay: ${i * 100}`}
+          >
+            <div class="plan__top">
+              <h3 id={`plan-${plan.id}`} class="plan__name">
+                {plan.name}
+              </h3>
+              {plan.featured && <span class="plan__badge">Empfehlung</span>}
+            </div>
+            <p class="plan__price">
+              <span class="plan__amount tabular">{euro(plan.price)}</span>
+              <span class="plan__unit">
+                / {plan.unit}
+                <br />/ Koffer
+              </span>
+            </p>
+            <p class="plan__text">{plan.text}</p>
+            <ul class="plan__features" role="list">
+              {plan.features.map((f) => (
+                <li>
+                  <Check aria-hidden="true" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <a
+              class:list={['btn', 'btn--block', plan.featured ? 'btn--light' : 'btn--dark']}
+              href="#anfrage"
+            >
+              {plan.cta} <ArrowRight aria-hidden="true" />
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <ul class="info" role="list">
+      {
+        info.map((item, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 60}`}>
+            <item.icon aria-hidden="true" stroke-width={1.6} />
+            <span>
+              <strong>{item.title}</strong>
+              {item.text}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pricing__head {
+    justify-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .pricing__head {
+      justify-items: center;
+      text-align: center;
+    }
+    .pricing__head .lead {
+      margin-inline: auto;
+    }
+  }
+
+  .plans {
+    display: grid;
+    gap: 1rem;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 760px) {
+    .plans {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    transition:
+      transform 0.4s var(--ease),
+      box-shadow 0.4s var(--ease);
+  }
+
+  @media (hover: hover) {
+    .plan:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+  }
+
+  .plan--featured {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .plan__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2rem;
+  }
+
+  .plan__name {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .plan__badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .plan__price {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .plan__amount {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 3rem + 4vw, 6rem);
+    font-weight: 750;
+    font-stretch: 82%;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+
+  .plan__unit {
+    padding-bottom: 0.2rem;
+    font-size: 0.9375rem;
+    line-height: 1.3;
+    opacity: 0.7;
+  }
+
+  .plan__text {
+    margin-top: 1.25rem;
+    opacity: 0.8;
+  }
+
+  .plan__features {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+    margin: 1.5rem 0 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid currentColor;
+    border-top-color: color-mix(in srgb, currentColor 15%, transparent);
+  }
+
+  .plan__features li {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+  }
+
+  .plan__features :global(svg) {
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.2rem;
+    color: var(--accent);
+  }
+
+  .plan--featured .plan__features :global(svg) {
+    color: var(--accent-soft);
+  }
+
+  .plan .btn {
+    margin-top: auto;
+  }
+
+  .info {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    max-width: 62rem;
+    margin: clamp(2rem, 5vw, 3rem) auto 0;
+  }
+
+  @media (min-width: 560px) {
+    .info {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .info {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .info li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--sage);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .info :global(svg) {
+    flex: none;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-top: 0.1rem;
+    color: var(--accent);
+  }
+
+  .info strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

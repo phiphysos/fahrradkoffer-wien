@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+
+<Base title="Seite nicht gefunden | Fahrradkoffer mieten Wien" path="404.html" noindex>
+  <section class="container notfound">
+    <p class="eyebrow">Fehler 404</p>
+    <h1 class="h2">Falsch abgebogen.</h1>
+    <p class="lead">Diese Seite gibt es nicht. Zurück auf die Strecke?</p>
+    <a class="btn btn--primary" href={url('')}>Zur Startseite</a>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+    padding-block: clamp(4rem, 14vw, 10rem);
+  }
+</style>

@@ -1,0 +1,153 @@
+---
+import { business, contact, location } from '../../site.config';
+import { url } from '../lib/url';
+import Logo from './Logo.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <p class="footer__claim">Dein Rad. Deine Reise.<br /><span>Unser Koffer.</span></p>
+      <a class="btn btn--light" href={url('#anfrage')}>Jetzt anfragen</a>
+    </div>
+
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <Logo size={40} />
+        <p>
+          <strong>{business.name}</strong>
+          Privater Verleih von Fahrradkoffern
+        </p>
+      </div>
+      <div>
+        <p class="footer__label">Abholung</p>
+        <p>{location.name}<br />{location.postalCode} {location.city}</p>
+      </div>
+      <div>
+        <p class="footer__label">Kontakt</p>
+        <p><a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+      </div>
+      <nav aria-label="Rechtliches">
+        <p class="footer__label">Rechtliches</p>
+        <ul role="list">
+          <li><a href={url('impressum/')}>Impressum</a></li>
+          <li><a href={url('datenschutz/')}>Datenschutz</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="footer__copy">
+      © <span data-year>{year}</span>
+      {business.name}
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('[data-year]').forEach((el) => (el.textContent = String(new Date().getFullYear())));
+</script>
+
+<style>
+  .footer {
+    padding: clamp(4rem, 10vw, 7rem) 0 calc(2rem + env(safe-area-inset-bottom));
+  }
+
+  .footer__top {
+    display: grid;
+    gap: 2rem;
+    align-items: end;
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  @media (min-width: 800px) {
+    .footer__top {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .footer__claim {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.5rem + 4.5vw, 5.5rem);
+    font-weight: 750;
+    font-stretch: 82%;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .footer__claim span {
+    color: var(--accent-soft);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: 2rem;
+    padding: clamp(2.5rem, 6vw, 4rem) 0;
+    font-size: 0.9375rem;
+    color: var(--on-dark-soft);
+  }
+
+  @media (min-width: 640px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    }
+  }
+
+  .footer__brand {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .footer__brand strong {
+    display: block;
+    color: var(--on-dark);
+    font-weight: 600;
+  }
+
+  .footer__label {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-dark);
+  }
+
+  .footer ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .footer__grid a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 0.2s;
+  }
+
+  .footer__grid a:hover {
+    color: var(--on-dark);
+    text-decoration: underline;
+  }
+
+  .footer__copy {
+    padding-top: 2rem;
+    border-top: 1px solid var(--line-dark);
+    font-size: 0.8125rem;
+    color: var(--on-dark-soft);
+  }
+</style>
